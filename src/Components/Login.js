@@ -5,8 +5,8 @@ class Login extends Component {
     formdata: {
       name: "",
       lastname: "",
-      password: "",
       email: "",
+      password: "",
     },
     register: false,
     loading: false,
@@ -14,12 +14,19 @@ class Login extends Component {
 
   handleFormType = () => {
     this.setState((prevState) => ({
+      ...prevState,
       register: !prevState.register,
     }));
   };
+
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state.formdata);
+    this.setState({ loading: true });
+    if (this.state.register) {
+      console.log(this.state.formdata, "register");
+    } else {
+      console.log(this.state.formdata, "login");
+    }
   };
 
   handleInputs = (e) => {
@@ -38,8 +45,8 @@ class Login extends Component {
     let formTitle = register ? "Register" : "Sign In";
     return (
       <>
-        <div className="containter login-wrapper">
-          <form className="form-signin" onSubmit={this.handleSubmit}>
+        <div className="container login-wrapper">
+          <form className="form-signin " onSubmit={this.handleSubmit}>
             <h1 className="h3 mb-3 font-weight-normal">{formTitle}</h1>
             {register ? (
               <>
@@ -49,8 +56,8 @@ class Login extends Component {
                   name="name"
                   className="form-control mb-3"
                   placeholder="Your name"
-                  onChange={this.handleInputs}
                   value={formdata.name}
+                  onChange={this.handleInputs}
                 />
 
                 <input
@@ -59,8 +66,8 @@ class Login extends Component {
                   name="lastname"
                   className="form-control mb-3"
                   placeholder="Your lastname"
-                  onChange={this.handleInputs}
                   value={formdata.lastname}
+                  onChange={this.handleInputs}
                 />
               </>
             ) : null}
@@ -68,11 +75,11 @@ class Login extends Component {
             <input
               type="email"
               id="email"
-              name="email"
               className="form-control mb-3"
               placeholder="Email address"
-              onChange={this.handleInputs}
+              name="email"
               value={formdata.email}
+              onChange={this.handleInputs}
             />
 
             <input
@@ -81,8 +88,8 @@ class Login extends Component {
               name="password"
               className="form-control"
               placeholder="Password"
-              onChange={this.handleInputs}
               value={formdata.password}
+              onChange={this.handleInputs}
             />
 
             <br />
@@ -95,7 +102,7 @@ class Login extends Component {
             </button>
 
             <div className="mt-3">
-              {register ? "Need to sign in" : "Not registered"}? click
+              {register ? "Need to sign in" : "Not registered"} click?
               <span
                 className="login_type_btn"
                 onClick={() => this.handleFormType()}
@@ -103,7 +110,7 @@ class Login extends Component {
                 {" "}
                 here{" "}
               </span>
-              to {register ? "Sign in" : "Register"}.
+              to {register ? "Sign In" : "Register"}.
             </div>
           </form>
         </div>
