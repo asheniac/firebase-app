@@ -1,14 +1,16 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+import { usersCollection } from "../utils/fBase";
 
-import { usersCollection } from "../utils/firebase";
-export const registerUser = async ({ email, password, name, lastname }) => {
+export const registerUsers = async ({ email, name, lastname, password }) => {
   try {
     const response = await firebase
       .auth()
-      .createUserWithEmailAndPassword(email, password); //it will create uid automatically
-    const { user } = response; //const user= reponse.user;
+      .createUserWithEmailAndPassword(email, password);
+
+    const { user } = response;
+    console.log(response.user);
     const userProfile = {
       uid: user.uid,
       email: email,
@@ -24,3 +26,18 @@ export const registerUser = async ({ email, password, name, lastname }) => {
     return { error: error.message };
   }
 };
+
+export const loginUser = ({ email, password }) =>
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((response) => {
+      const { user } = response;
+      return usersCollection
+        .doc(user.uid)
+        .get()
+        .then((snapshot) => {
+          return { isAuth: true, user: snapshot.data() };
+        });
+    })
+    .catch((error) => ({ error: error.message }));
