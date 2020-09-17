@@ -8,18 +8,20 @@ import Contact from "./Components/Contact";
 import HomePage from "./Components/HomePage";
 //react-toastify
 import ToastsComponent from "./utils/toasts";
-import { autoSignIn } from "./store/actions";
+import { autoSignIn, logoutUser } from "./store/actions";
 
 class Routes extends Component {
   componentDidMount() {
     return this.props.dispatch(autoSignIn());
   }
-
+  handleLogout = () => {
+    return this.props.dispatch(logoutUser());
+  };
   app = (auth) => {
     return (
       <div>
         <BrowserRouter>
-          <Header />
+          <Header auth={auth} Logout={this.handleLogout} />
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route exact path="/login" component={Login} />

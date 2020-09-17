@@ -54,7 +54,11 @@ export const autoSignIn = () => {
         })
         .catch((error) => error.message);
     } else {
-      return { isAuth: false, user: null, checkingAuth: false };
+      return { isAuth: false, user: null };
     }
   });
+};
+
+export const logoutUser = () => {
+  firebase.auth().signOut();
 };

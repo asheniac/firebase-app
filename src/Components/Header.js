@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Header = (props) => {
+  const { isAuth } = props.auth;
   return (
     <>
       <header>
@@ -13,12 +14,24 @@ const Header = (props) => {
             <Link className="mt-4" to="/">
               Home
             </Link>
-            <Link className="mt-4" to="/login">
-              Login
-            </Link>
+
             <Link className="mt-4" to="/contact">
               Contact
             </Link>
+            {isAuth ? (
+              <>
+                <Link className="mt-4 header-btn" to="/dashboard">
+                  Dash Board
+                </Link>
+                <div className="mt-4 header-btn" onClick={props.Logout}>
+                  Logout
+                </div>
+              </>
+            ) : (
+              <Link className="mt-4" to="/login">
+                Login
+              </Link>
+            )}
           </div>
         </nav>
       </header>
