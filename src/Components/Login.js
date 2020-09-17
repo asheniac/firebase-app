@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { registerUsers, loginUser } from "../store/actions";
 
+//react-toastify
+import { toast } from "react-toastify";
+
 class Login extends Component {
   state = {
     formdata: {
@@ -41,7 +44,14 @@ class Login extends Component {
     }
   };
 
-  handleRedirection = (result) => {};
+  handleRedirection = (result) => {
+    if (result.error) {
+      this.setState({ loading: false });
+      toast.error(result.error, { position: toast.POSITION.BOTTOM_RIGHT });
+    } else {
+      return this.props.history.push("/dashboard");
+    }
+  };
 
   handleInputs = (e) => {
     let name = e.target.name;
