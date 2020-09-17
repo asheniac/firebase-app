@@ -42,22 +42,23 @@ export const loginUser = ({ email, password }) =>
     })
     .catch((error) => ({ error: error.message }));
 
-export const autoSignIn = () => {
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      usersCollection
-        .doc(user.uid)
-        .get()
-        .then((snapshot) => {
-          //console.log(snapshot.data());
-          return { isAuth: true, user: snapshot.data() };
-        })
-        .catch((error) => error.message);
-    } else {
-      return { isAuth: false, user: null };
-    }
+export const autoSignIn = () =>
+  new Promise((resolve, reject) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        usersCollection
+          .doc(user.uid)
+          .get()
+          .then((snapshot) => {
+            resolve({ isAuth: true, user: snapshot.data() });
+            reject((error) => error.message);
+          });
+      } else {
+        resolve({ isAuth: false, user: null });
+        reject((error) => error.message);
+      }
+    });
   });
-};
 
 export const logoutUser = () => {
   firebase.auth().signOut();

@@ -12,7 +12,7 @@ import { autoSignIn, logoutUser } from "./store/actions";
 
 class Routes extends Component {
   componentDidMount() {
-    return this.props.dispatch(autoSignIn());
+    this.props.dispatch(autoSignIn());
   }
   handleLogout = () => {
     return this.props.dispatch(logoutUser());
