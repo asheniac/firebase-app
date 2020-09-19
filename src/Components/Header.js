@@ -20,10 +20,10 @@ const Header = (props) => {
             </Link>
             {isAuth ? (
               <>
-                <Link className="mt-4 header-btn" to="/dashboard">
+                <Link className="mt-4 header_btn" to="/dashboard">
                   Dash Board
                 </Link>
-                <div className="mt-4 header-btn" onClick={props.Logout}>
+                <div className="mt-4 header_btn" onClick={props.Logout}>
                   Logout
                 </div>
               </>

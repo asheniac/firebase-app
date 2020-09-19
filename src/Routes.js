@@ -6,6 +6,7 @@ import Footer from "./Components/Footer";
 import Login from "./Components/Login";
 import Contact from "./Components/Contact";
 import HomePage from "./Components/HomePage";
+import Dashboard from "./Components/Dashboard";
 //react-toastify
 import ToastsComponent from "./utils/toasts";
 import { autoSignIn, logoutUser } from "./store/actions";
@@ -25,6 +26,7 @@ class Routes extends Component {
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/dashboard" component={Dashboard} />
             <Route exact path="/contact" component={Contact} />
           </Switch>
           <Footer />
