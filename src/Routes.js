@@ -7,9 +7,14 @@ import Login from "./Components/Login";
 import Contact from "./Components/Contact";
 import HomePage from "./Components/HomePage";
 import Dashboard from "./Components/Dashboard";
+import Profile from "./Components/Profile";
+import Reviews from "./Components/Reviews";
 //react-toastify
 import ToastsComponent from "./utils/toasts";
 import { autoSignIn, logoutUser } from "./store/actions";
+
+//router guard
+import authHoc from "./Components/hoc/authHoc";
 
 class Routes extends Component {
   componentDidMount() {
@@ -24,9 +29,19 @@ class Routes extends Component {
         <BrowserRouter>
           <Header auth={auth} Logout={this.handleLogout} />
           <Switch>
+            <Route
+              exact
+              path="/dashboard/profile"
+              component={authHoc(Profile)}
+            />
+            <Route
+              exact
+              path="/dashboard/reviews"
+              component={authHoc(Reviews, true)}
+            />
             <Route exact path="/" component={HomePage} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/dashboard" component={authHoc(Dashboard)} />
             <Route exact path="/contact" component={Contact} />
           </Switch>
           <Footer />
