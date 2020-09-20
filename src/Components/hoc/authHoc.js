@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-const authHoc = (component, isAdmin = false) => {
+const authHoc = (HocComponent, isAdmin = false) => {
   class AuthHoc extends Component {
     authCheck = (props) => {
       const { auth } = this.props;
@@ -12,7 +12,7 @@ const authHoc = (component, isAdmin = false) => {
         if (role === 1 && isAdmin) {
           return <Redirect to="/dashboard" />;
         }
-        return <component {...this.props} />;
+        return <HocComponent {...this.props} />;
       } else {
         //Go to login poage
         return <Redirect to="/login" />;

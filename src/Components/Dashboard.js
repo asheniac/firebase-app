@@ -1,9 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
+import DashLayout from "../utils/dash_layout";
 
-class Dashboard extends Component {
-  render() {
-    return <div>this is dashboard</div>;
-  }
-}
+const Dashboard = (props) => {
+  return (
+    <DashLayout auth={props.auth} title="Dashboard">
+      Dashboard
+    </DashLayout>
+  );
+};
 
 export default Dashboard;

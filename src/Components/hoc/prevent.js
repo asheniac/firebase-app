@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-const prevent = (component) => {
+const prevent = (HocComponent) => {
   class Prevent extends Component {
     render() {
       return this.props.auth.isAuth ? (
         <Redirect to="/dashboard" />
       ) : (
-        <component {...this.props} />
+        <HocComponent {...this.props} />
       );
     }
   }
