@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-const authHoc = (component, isAdmin) => {
+const authHoc = (component, isAdmin = false) => {
   class AuthHoc extends Component {
     authCheck = (props) => {
       const { auth } = this.props;
