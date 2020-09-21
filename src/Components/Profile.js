@@ -1,23 +1,45 @@
 import React, { useState } from "react";
 import DashLayout from "../utils/dash_layout";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+
+import LoginModal from "../utils/login_modal";
 
 import { useSelector, useDispatch } from "react-redux";
+
+import { updateProfile } from "../store/actions";
 
 const Profile = (props) => {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const { register, handleSubmit, errors } = useForm();
-  const [disable, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [showModal, setShowModal] = useState({ open: false, formData: "" });
+
+  const handleReAuthModal = (data) => {
+    setShowModal({ open: true, formData: data });
+  };
 
   const submitForm = (data) => {
-    console.log(data);
+    const isEmailChanged = auth.user.email === data.email ? false : true;
+    setDisabled(true);
+    setShowModal({ open: false, formData: "" });
+    //dispatch
+    dispatch(
+      updateProfile({ uid: auth.user.uid, ...data }, isEmailChanged)
+    ).then(() => {
+      toast.success("Your profile has been updated!", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    });
   };
+
+  const handleClose = () => setShowModal({ open: false, formData: "" });
 
   return (
     <DashLayout auth={auth} title="Profile">
-      <form onSubmit={handleSubmit(submitForm)}>
+      <form onSubmit={handleSubmit(handleReAuthModal)}>
         <div className="row">
           <div className="col-md-6 mb-3">
             <label htmlFor="name">First name</label>
@@ -129,10 +151,17 @@ const Profile = (props) => {
         <button
           className="btn btn-outline-primary btn-lg btn-block"
           type="submit"
+          disabled={disabled}
         >
           Update profile
         </button>
       </form>
+      <LoginModal
+        modalState={showModal}
+        handleClose={handleClose}
+        handleReAuthModal={handleReAuthModal}
+        submitForm={(data) => submitForm(data)}
+      />
     </DashLayout>
   );
 };

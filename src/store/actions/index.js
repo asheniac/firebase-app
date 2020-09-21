@@ -20,3 +20,8 @@ export const logoutUser = () => ({
   type: LOGOUT_USER,
   payload: api.logoutUser(),
 });
+
+export const updateProfile = (formData, isEmailChanged) => ({
+  type: AUTH_USER,
+  payload: api.updateProfile(formData, isEmailChanged),
+});
