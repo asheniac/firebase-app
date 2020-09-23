@@ -10,7 +10,7 @@ export const registerUsers = async ({ email, name, lastname, password }) => {
       .createUserWithEmailAndPassword(email, password);
 
     const { user } = response;
-    console.log(response.user);
+    // console.log(response.user);
     const userProfile = {
       uid: user.uid,
       email: email,

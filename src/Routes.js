@@ -9,6 +9,7 @@ import HomePage from "./Components/HomePage";
 import Dashboard from "./Components/Dashboard";
 import Profile from "./Components/Profile";
 import Reviews from "./Components/Reviews";
+import ReviewAddEdit from "./Components/Reviews/add_edit";
 //react-toastify
 import ToastsComponent from "./utils/toasts";
 import { autoSignIn, logoutUser } from "./store/actions";
@@ -38,6 +39,11 @@ class Routes extends Component {
               exact
               path="/dashboard/reviews"
               component={authHoc(Reviews, true)}
+            />
+            <Route
+              exact
+              path="/dashboard/reviews/add"
+              component={authHoc(ReviewAddEdit, true)}
             />
             <Route exact path="/" component={HomePage} />
             <Route exact path="/login" component={Login} />
