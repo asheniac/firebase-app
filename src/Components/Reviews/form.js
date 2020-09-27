@@ -5,10 +5,15 @@ import { Form, Button, Col } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { toast } from "../../utils/toasts";
+//import editor
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import { toast } from "../../utils/toasts";
 
 class ReviewForm extends Component {
   state = {
+    editor: "",
+    editorErrors: false,
     initialValues: {
       title: " ",
       excerpt: "",
@@ -31,6 +36,11 @@ class ReviewForm extends Component {
         })}
         onSubmit={(values, { resetForm }) => {
           console.log(values);
+          if(Object.entries(state.editor).length===0){
+
+          }else{
+            console.log(object)
+          }
         }}
       >
         {({ values, errors, touched, handleChange, handleSubmit }) => (
@@ -60,9 +70,20 @@ class ReviewForm extends Component {
                       value={values.excerpt}
                       onChange={handleChange}
                     />
-                    <div className="error"></div>
+                    {errors.excerpt && touched.excerpt ? (
+                      <div className="error">{errors.excerpt}</div>
+                    ) : null}
                   </Form.Group>
-                  <Form.Group>editor</Form.Group>
+                  <Form.Group>
+                    <CKEditor
+                      editor={ClassicEditor}
+                      data={state.editor}
+                      onChange={(event, editor) => {
+                        this.setState({editor.getData();})
+                        
+                      }}
+                    />
+                  </Form.Group>
                   <div className="error"></div>
 
                   <Form.Group>
@@ -82,7 +103,9 @@ class ReviewForm extends Component {
                       <option value="4">4 Stars</option>
                       <option value="5">5 Stars</option>
                     </Form.Control>
-                    <div className="error"></div>
+                    {errors.rating && touched.rating ? (
+                      <div className="error">{errors.rating}</div>
+                    ) : null}
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Public</Form.Label>
@@ -98,7 +121,9 @@ class ReviewForm extends Component {
                       <option value="1">Public</option>
                       <option value="0">Draft</option>
                     </Form.Control>
-                    <div className="error"></div>
+                    {errors.public && touched.public ? (
+                      <div className="error">{errors.public}</div>
+                    ) : null}
                   </Form.Group>
                   <Button variant="primary" type="submit" disabled="">
                     Submit
