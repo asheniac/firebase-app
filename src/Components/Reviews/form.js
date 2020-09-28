@@ -5,13 +5,15 @@ import { Form, Button, Col } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
+import { addReview } from "../../store/actions";
 //import editor
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import { toast } from "../../utils/toasts";
+import { toast } from "react-toastify";
 
 class ReviewForm extends Component {
   state = {
+    disable: false,
     editor: "",
     editorErrors: false,
     initialValues: {
@@ -20,6 +22,19 @@ class ReviewForm extends Component {
       rating: "",
       public: "",
     },
+  };
+
+  handleResetForm = (resetForm) => {
+    resetForm({});
+    this.setState({ editor: "", disable: false });
+    toast.success("Review is saved", { position: toast.POSITION.TOP_RIGHT });
+  };
+  handleSubmit = (values, resetForm) => {
+    let formData = { ...values, content: this.state.editor };
+
+    this.props.dispatch(addReview(formData, this.props.auth.user)).then(() => {
+      this.handleResetForm(resetForm);
+    });
   };
 
   render() {
@@ -36,10 +51,12 @@ class ReviewForm extends Component {
         })}
         onSubmit={(values, { resetForm }) => {
           console.log(values);
-          if(Object.entries(state.editor).length===0){
-
-          }else{
-            console.log(object)
+          if (Object.entries(state.editor).length === 0) {
+            return this.setState({ editorErrors: true });
+          } else {
+            //console.log(Object);
+            this.setState({ disable: true, editorErrors: false });
+            this.handleSubmit(values, resetForm);
           }
         }}
       >
@@ -79,12 +96,14 @@ class ReviewForm extends Component {
                       editor={ClassicEditor}
                       data={state.editor}
                       onChange={(event, editor) => {
-                        this.setState({editor.getData();})
-                        
+                        this.setState({ editor: editor.getData() });
                       }}
                     />
+
+                    {state.editorErrors ? (
+                      <div className="error">Editor Error</div>
+                    ) : null}
                   </Form.Group>
-                  <div className="error"></div>
 
                   <Form.Group>
                     <Form.Label>Rating</Form.Label>
@@ -125,7 +144,11 @@ class ReviewForm extends Component {
                       <div className="error">{errors.public}</div>
                     ) : null}
                   </Form.Group>
-                  <Button variant="primary" type="submit" disabled="">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={state.disable}
+                  >
                     Submit
                   </Button>
                 </Col>

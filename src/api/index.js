@@ -1,7 +1,9 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import { usersCollection } from "../utils/fBase";
+import { usersCollection, reviewsCollection } from "../utils/fBase";
+
+const sererTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 
 export const registerUsers = async ({ email, name, lastname, password }) => {
   try {
@@ -83,4 +85,23 @@ export const updateProfile = (formData, isEmailChanged) => {
   } else {
     return updateDocument();
   }
+};
+
+//===reviews===
+
+export const addReview = (data, user) => {
+  reviewsCollection
+    .add({
+      ...data,
+      createdAt: sererTimestamp(),
+      rating: parseInt(data.rating),
+      public: parseInt(data.public),
+      ownerData: {
+        ownerId: user.uid,
+        name: `${user.name} ${user.lastname}`,
+      },
+    })
+    .then((docRef) => {
+      return docRef.id;
+    });
 };
