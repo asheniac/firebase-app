@@ -5,7 +5,8 @@ import { Form, Button, Col } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { addReview } from "../../store/actions";
+import { addReview, clearReview } from "../../store/actions";
+import Uploader from "./uploader";
 //import editor
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -13,6 +14,9 @@ import { toast } from "react-toastify";
 
 class ReviewForm extends Component {
   state = {
+    img: "https://via.placeholder.com/400",
+    imgName: "",
+    imgErrors: " ",
     disable: false,
     editor: "",
     editorErrors: false,
@@ -24,13 +28,30 @@ class ReviewForm extends Component {
     },
   };
 
+  componentWillUnmount() {
+    this.props.dispatch(clearReview());
+  }
+  handleImageName = (name, downloadURL) => {
+    this.setState({ img: downloadURL, imgName: name });
+  };
+
   handleResetForm = (resetForm) => {
     resetForm({});
-    this.setState({ editor: "", disable: false });
+    this.setState({
+      editor: "",
+      disable: false,
+      img: "https://via.placeholder.com/400",
+      imgErrors: false,
+    });
     toast.success("Review is saved", { position: toast.POSITION.TOP_RIGHT });
   };
   handleSubmit = (values, resetForm) => {
-    let formData = { ...values, content: this.state.editor };
+    let formData = {
+      ...values,
+      content: this.state.editor,
+      img: this.state.imgName,
+      imgURL: this.state.img,
+    };
 
     this.props.dispatch(addReview(formData, this.props.auth.user)).then(() => {
       this.handleResetForm(resetForm);
@@ -53,6 +74,8 @@ class ReviewForm extends Component {
           console.log(values);
           if (Object.entries(state.editor).length === 0) {
             return this.setState({ editorErrors: true });
+          } else if (state.imgName === "") {
+            this.setState({ editorErrors: false, imgErrors: true });
           } else {
             //console.log(Object);
             this.setState({ disable: true, editorErrors: false });
@@ -153,8 +176,13 @@ class ReviewForm extends Component {
                   </Button>
                 </Col>
                 <Col>
-                  UPLOADER
-                  <div className="error">Add an image please</div>
+                  <Uploader
+                    img={state.img}
+                    handleImageName={this.handleImageName}
+                  />
+                  {state.imgError ? (
+                    <div className="error">Please add an img</div>
+                  ) : null}
                 </Col>
               </Form.Row>
             </Form>
