@@ -1,17 +1,25 @@
-import { AUTH_USER, LOGOUT_USER } from "../types";
+import {
+    AUTH_USER,
+    LOGOUT_USER,
+    SEND_CONTACT
+} from '../types';
 
-const INITAL_STATE = {
-  isAuth: false,
-  user: null,
-  checkingAuth: false,
-};
-export default function (state = INITAL_STATE, action) {
-  switch (action.type) {
-    case AUTH_USER:
-      return { ...action.payload, checkingAuth: true };
-    case LOGOUT_USER:
-      return { ...state, isAuth: false, user: null };
-    default:
-      return state;
-  }
+const INITIAL_STATE = {
+    isAuth: false,
+    user: null,
+    checkingAuth: false
+}
+
+
+export default function(state=INITIAL_STATE,action){
+    switch(action.type){
+        case AUTH_USER:
+            return {...action.payload, checkingAuth:true}
+        case LOGOUT_USER:
+            return {...state, user:null, isAuth:false}
+        case SEND_CONTACT:
+            return {...state,contact: action.payload }
+        default:
+            return state;
+    }
 }
